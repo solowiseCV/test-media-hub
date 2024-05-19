@@ -40,7 +40,7 @@ const {movieFile} = req.files
             name,
              description,
              createdBy ,
-            movieFile: uploadedResponse});
+            movieFile: uploadedResponse.secure_url});
           res.status(201).json(newMoviePlayList);
     }
 }
