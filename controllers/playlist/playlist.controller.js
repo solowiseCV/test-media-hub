@@ -4,8 +4,9 @@ import cloudinary from '../../configs/cloudinary.js'
 
 // Create playList
 export const createPlayList= asyncHandler(async (req, res) => {
-  const { name, description, createdBy,audioFile,  } = req.body;
-
+  const { name, description, createdBy  } = req.body;
+ const {audioFile} = req.files;
+ 
   //checking 
   if (!name || !description || !createdBy || !audioFile) {
     res.status(400);
@@ -27,15 +28,20 @@ export const createPlayList= asyncHandler(async (req, res) => {
 
   //create playlist
   try {
-    if(audioFile){
-        const uploadedResponse = await cloudinary.uploader.upload(image, {
-            upload_preset: "media-hub", });
+    let uploadedResponse;
+    if (audioFile) {
+      uploadedResponse = await cloudinary.uploader.upload(audioFile.path, {
+        resource_type: "auto",
+        upload_preset: "media-hub",
+      });
     }
+
     if (uploadedResponse) {
         const newPlayList = await saveNewPlayList({ 
             name,
              description,
-             createdBy });
+             createdBy,
+            audioFile:uploadedResponse });
           res.status(201).json(newPlayList);
     }
 

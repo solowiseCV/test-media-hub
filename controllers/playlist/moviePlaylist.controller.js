@@ -4,8 +4,8 @@ import cloudinary from '../../configs/cloudinary.js'
 
 // Create playList
 export const createMoviePlayList= asyncHandler(async (req, res) => {
-  const { name, description, createdBy,movieFile,  } = req.body;
-
+  const { name, description, createdBy  } = req.body;
+const {movieFile} = req.files
   //checking 
   if (!name || !description || !createdBy || !movieFile) {
     res.status(400);
@@ -27,9 +27,13 @@ export const createMoviePlayList= asyncHandler(async (req, res) => {
 
   //create playlist
   try {
-    if(movieFile){
-        const uploadedResponse = await cloudinary.uploader.upload(image, {
-            upload_preset: "media-hub", });
+    let uploadedResponse;
+    if (movieFile) {
+      uploadedResponse = await cloudinary.uploader.upload(audioFile.path, {
+        resource_type: "video",
+        upload_preset: "media-hub",
+      });
+    }
     
     if (uploadedResponse) {
         const newMoviePlayList = await saveNewPlayList({ 
@@ -40,7 +44,7 @@ export const createMoviePlayList= asyncHandler(async (req, res) => {
           res.status(201).json(newMoviePlayList);
     }
 }
-  } catch (error) {
+   catch (error) {
     res.status(500);
     throw new Error("Invalid PlayList data");
   }
