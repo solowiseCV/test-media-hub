@@ -4,9 +4,8 @@ import Joi from 'joi';
 // Joi schema for signup validation
 const signUpSchema = Joi.object({
   email: Joi.string().email().required(),
-  fullName: Joi.string().min(5).max(20).required(),
-  userName:Joi.string().min(5).max(20).required(),
-  role: Joi.string().required(),
+  name: Joi.string().min(5).max(20).required(),
+  role: Joi.string(),
   password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required().min(6),
 });
 
@@ -19,7 +18,7 @@ const signInSchema = Joi.object({
 // Joi schema for signup validation
 const editSchema = Joi.object({
   email: Joi.string().email().optional(),
-  fullName: Joi.string().min(5).max(20).optional(),
+  name: Joi.string().min(5).max(20).optional(),
   password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required().min(6),
 });
 
