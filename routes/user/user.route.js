@@ -18,15 +18,20 @@ const {
 } = new UserController();
 
 //create a user or signup
-router.post("/", validateSignUp, createUser);
+router.post("/signup", validateSignUp, createUser);
+
 //login a user
-router.post("/login", validateSignIn, login);
+router.post("/signin", validateSignIn, login);
+
 //get a user with an id
 router.get("/:userId", authenticate, getUserById);
+
 //get users
 router.get("/", authenticate, getUsers);
+
 //edit any user details
 router.patch("/:userId", authenticate, validateEdit, editUserById);
+
 // delete user
 router.delete("/:userId", authenticate, deleteById);
 //logout a user or signup

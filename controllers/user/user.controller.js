@@ -17,7 +17,7 @@ const {
 
 export default class UserController {
     async createUser(req, res) {
-        const { email, userName } = req.body;
+        const { email, name } = req.body;
 
         //checks if another user with email exists
         if (await findByEmail(email)) {

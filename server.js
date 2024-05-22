@@ -10,6 +10,7 @@ import session from "express-session";
 import passport from "passport";
 import googleAuthMiddleware from "./middlewares/authentication/googleAuthMiddleware.js";
 import googleAuthRoutes from "./routes/authentication/googleAuthRoutes.js";
+import multer from 'multer';
 
 dotenv.config();
 
@@ -19,10 +20,32 @@ const router = Router();
 const rootRouter = baseRoute(router);
 
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');  // Directory to save the uploaded files
+  },  
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`);  // Naming the file
+  }
+});
+
+const upload = multer({ storage });
+
+
+
+
 app.use(express.json());
-app.use(cors());
+
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(
+  cors(
+      {
+          origin:["http://localhost:5173","https://mediaHub.vercel.app"],
+          credentials:true,
+      }
+  )
+);
 
 
 // Configuring express-session middleware
@@ -57,9 +80,6 @@ app.use("/", googleAuthRoutes);
 
 // routes
 app.use("/api/v1", rootRouter);
-app.use('*', (req, res) => {
-    res.status(404).send('Resource URL not found');
-  });
 
 
 //Error middleware
